@@ -1,0 +1,35 @@
+﻿@{
+    ViewData["Title"] = "Админ панель";
+}
+
+<h2>Админ панель</h2>
+
+<nav>
+    <div class="nav nav-tabs" id="nav-tab" role="tablist">
+        <button class="nav-link active" id="nav-users-tab" data-bs-toggle="tab" data-bs-target="#nav-users" type="button" role="tab" aria-controls="nav-users" aria-selected="true">Структурные подразделения</button>
+        <button class="nav-link" id="nav-students-tab" data-bs-toggle="tab" data-bs-target="#nav-students" type="button" role="tab" aria-controls="nav-students" aria-selected="false">Студенты</button>
+        <button class="nav-link" id="nav-teachers-tab" data-bs-toggle="tab" data-bs-target="#nav-teachers" type="button" role="tab" aria-controls="nav-teachers" aria-selected="false">Преподаватели</button>
+    </div>
+</nav>
+<div class="tab-content" id="nav-tabContent">
+
+    <div class="tab-pane fade show active" id="nav-users" role="tabpanel" aria-labelledby="nav-users-tab">
+
+        @await Html.PartialAsync("_Structures")
+
+    </div>
+
+    <div class="tab-pane fade" id="nav-students" role="tabpanel" aria-labelledby="nav-students-tab">
+
+        @await Html.PartialAsync("_Students")
+
+    </div>
+    
+    <div class="tab-pane fade" id="nav-teachers" role="tabpanel" aria-labelledby="nav-teachers-tab">
+
+        @await Html.PartialAsync("_Teachers")
+
+    </div>
+</div>
+
+

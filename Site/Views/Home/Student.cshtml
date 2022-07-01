@@ -1,0 +1,19 @@
+﻿@using Site.Models.Entities
+@{
+    ViewData["Title"] = "Главная";
+}
+@model List<Course>
+
+<h2>Мои курсы</h2>
+
+<ul class="list-group">
+    @foreach(Course i in Model)
+    {
+        <li class="list-group-item">
+            <div style="display:flex; justify-content:space-between; align-items:center">
+                <a asp-controller='Course' asp-action="GetCourse" asp-route-id="@i.Id">@i.Name</a>
+                <span>@i.Group.Name</span>
+            </div>
+        </li>
+    }
+</ul>

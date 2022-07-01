@@ -1,0 +1,29 @@
+﻿@using Site.Models.Entities
+@{
+    ViewData["Title"] = "Лекция";
+}
+@model EducationalMaterial
+
+
+<h2>@Model.Name</h2>
+<input type='hidden' id='lecId' value="@Model.Id"/>
+
+<div id="lection">
+
+</div>
+
+
+<script>
+
+    updateLection();
+    function updateLection() {
+        $.ajax({
+            type: 'GET',
+            url: '/Material/GetHtml',
+            data: { id: $("#lecId").val() },
+            success: function(res) {
+                $("#lection").html(res);
+            }
+        })
+    }
+</script>

@@ -1,0 +1,200 @@
+﻿@{
+    ViewData["Title"] = "Регистрация";
+}
+@using Site.ViewModels.Account;
+@model RegistrationViewModel;
+  
+<h2>Регистрация</h2>
+
+<form method="post" asp-controller="Account" asp-action="Registration" >
+    <div asp-validation-summary="ModelOnly"></div>
+
+    <input type="hidden" asp-for="ReturnUrl" value="@Model.ReturnUrl''"/>
+
+    <div class="mb-3">
+        <label asp-for="Email" class="form-label"></label>
+        <input asp-for="Email" class="form-control">
+        <span asp-validation-for="Email"></span>
+    </div>
+
+        <div class="input-group mb-3">
+          <span class="input-group-text" id="surName-span">Фамилия</span>
+          <input asp-for="SurName" type="text" class="form-control" placeholder="Фамилия" aria-describedby="surName-span">
+          <span class="input-group-text" id="firstName-span">Имя</span>
+          <input asp-for="FirstName" type="text" class="form-control" placeholder="Имя" aria-describedby="firstName-span">
+          <span class="input-group-text" id="middleName-span">Отчество</span>
+          <input asp-for="MiddleName" type="text" class="form-control" placeholder="Отчество" aria-describedby="middleName-span">
+    </div>
+
+    <div class="mb-3">
+        <div class="form-check">
+          <input asp-for="Role" value="student" onchange='selectStudent()' class="form-check-input" type="radio" id="flexRadioDefault1" checked>
+          <label class="form-check-label" for="flexRadioDefault1">
+            Я студент
+          </label>
+        </div>
+        <div class="form-check">
+          <input asp-for="Role" value="teacher" onchange='selectTeacher()' class="form-check-input" type="radio" id="flexRadioDefault2" >
+          <label class="form-check-label" for="flexRadioDefault2">
+            Я преподаватель
+          </label>
+        </div>
+    </div>
+
+    <div id='regStudent'>
+        <div class="mb-3">
+            <label class="form-label">Структурное подразделение</label>
+            <select onchange='structChange()' class="form-select" aria-label="Default select example" id='structSelect'>
+              <option value="1">One</option>
+              <option value="2">Two</option>
+              <option value="3">Three</option>
+            </select>
+        </div>
+
+        <div class="mb-3" id='facSelectDiv'>
+            <label class="form-label">Факультет</label>
+            <select onchange='facChange()' class="form-select" aria-label="Default select example" id='facSelect'>
+              <option value="1">One</option>
+              <option value="2">Two</option>
+              <option value="3">Three</option>
+            </select>
+        </div>
+
+        <div class="mb-3" id='dirSelectDiv'>
+            <label class="form-label">Направление подготовки</label>
+            <select onchange='dirChange()' class="form-select" aria-label="Default select example" id='dirSelect'>
+              <option value="1">One</option>
+              <option value="2">Two</option>
+              <option value="3">Three</option>
+            </select>
+        </div>
+        <div class="mb-3" id='gSelectDiv'>
+            <label class="form-label">Группа</label>
+            <select asp-for="GroupId" class="form-select" aria-label="Default select example" id='gSelect'>
+            </select>
+        </div>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Password" class="form-label"></label>
+        <input asp-for="Password" type="password" class="form-control">
+        <span asp-validation-for="Password"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="PasswordConfirm" class="form-label"></label>
+        <input asp-for="PasswordConfirm" type="password" class="form-control">
+        <span asp-validation-for="PasswordConfirm"></span>
+    </div>
+
+    <button class="btn btn-primary" type="submit">Зарегистрироваться</button>
+</form>
+
+<script>
+
+    updateStructs();
+
+    function selectTeacher() {
+        $("#regStudent").css({"display" : "none"});
+    }
+    function selectStudent() {
+        $("#regStudent").css({"display" : "block"});
+    }
+
+    function updateStructs() {
+        $("#facSelectDiv").css({"display" : "none"});
+        $.ajax({
+            type: 'GET',
+            url: '../Account/GetStructures',
+            success: function(res) {
+                let h = "";
+                for(let i = 0; i < res.length; i++) {
+                    if(i == 0) {
+                        updateFacs(res[0].id);
+                    }
+                    h += "<option value='" + res[i].id + "'>" + res[i].name + "</option>";
+                }
+                $("#structSelect").html(h);
+
+            }
+        })
+    }
+
+    function updateFacs(_id) {
+        $.ajax({
+            type: 'GET',
+            url: '../Account/GetFacs',
+            data: { id: _id },
+            success: function(res) {
+                if(res.length == 0) {
+                    $("#facSelectDiv").css({"display" : "none"});
+                    updateDirections(_id, false);
+                }
+                else {
+                    $("#facSelectDiv").css({"display" : "block"});
+                    let h = "";
+                    for(let i = 0; i < res.length; i++) {
+                        if(i == 0) {
+                            updateDirections(res[0].id, true);
+                        }
+                        h += "<option value='" + res[i].id + "'>" + res[i].name + "</option>";
+                    }
+                    $("#facSelect").html(h);
+                }
+                
+
+            }
+        })
+    }
+
+    function updateDirections(_id, _cond) {
+        $.ajax({
+            type: 'GET',
+            url: '../Account/GetDirections',
+            data: { id: _id, cond: _cond },
+            success: function(res) {
+                let h = "";
+                for(let i = 0; i < res.length; i++) {
+                    if(i == 0) {
+                        updateGroups(res[0].id);
+                    }
+                    h += "<option value='" + res[i].id + "'>" + res[i].name + "</option>";
+                }
+                $("#dirSelect").html(h);
+
+            }
+        })
+    }
+
+    function updateGroups(_id) {
+        $.ajax({
+            type: 'GET',
+            url: '../Account/GetGroups',
+            data: { id: _id },
+            success: function(res) {
+                let h = "";
+                for(let i = 0; i < res.length; i++) {
+                    h += "<option value='" + res[i].id + "'>" + res[i].name + "</option>";
+                }
+                $("#gSelect").html(h);
+
+            }
+        })
+    }
+
+    function structChange() {
+        let _id = $("#structSelect").val();
+        updateFacs(_id);
+    }
+
+    function facChange() {
+        let _id = $("#facSelect").val();
+        updateDirections(_id, true);
+    }
+
+    function dirChange() {
+        let _id = $("#dirSelect").val();
+        updateGroups(_id);
+    }
+
+</script>

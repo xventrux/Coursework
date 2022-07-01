@@ -1,0 +1,212 @@
+﻿<div class='m-3'>
+    <div class="p-2 sticky-top" style="background-color:white">
+        <div class="d-flex">
+            <input class="form-control me-2" type="search" placeholder="Поиск" aria-label="Search" id="searchFieldStructures">
+            <button class="btn btn-outline-success" onclick="">Искать</button>
+        </div>
+    </div>
+    <div class="m-2" >
+        <div style="display:flex; align-items:center">
+            <div class="form-check" style="margin-right:10px">
+              <input checked class="form-check-input" name="TeachersConfirme" type="radio" id="allTeachersRadio">
+              <label class="form-check-label" for="allTeachersRadio">
+                Все
+              </label>
+            </div>
+            <div class="form-check" style="margin-right:10px">
+              <input class="form-check-input" name="TeachersConfirme" type="radio" id="acceptTeachersRadio">
+              <label class="form-check-label" for="acceptTeachersRadio">
+                Подтвержденные
+              </label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" name="TeachersConfirme" type="radio" id="acceptTeachersRadio">
+              <label class="form-check-label" for="notacceptTeachersRadio">
+                Не подтвержденные
+              </label>
+            </div>
+        </div>
+        
+        
+    </div>
+
+    <table class="table table-hover align-middle">
+        <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">ФИО</th>
+                <th scope="col">Email</th>
+                <th scope="col">Статус</th>
+            </tr>
+        </thead>
+        <tbody id="TeachersTable">
+            <tr>
+                <th scope="row">
+                    1
+                </th>
+                <td>
+                    Иванов Иван Иванович
+                </td>
+                <td>
+                    test@mail.ru
+                </td>
+                <td>
+                    <div style='display:flex; align-content:center; justify-content:space-between'>
+                        <div style='display:flex; align-content:center'>
+                            <span style='margin-right:5px'>Не подтвержден</span>
+                            <button class="btn btn-primary">Подтвердить</button>
+                        </div>
+                        <div style='display:flex; align-content:center'>
+                            <button style='margin-right:5px' class='btn btn-light'><svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='currentColor' class='bi bi-info' viewBox='0 0 16 16'><path d='m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533L8.93 6.588zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0z'/></svg></button>
+                            <button class="btn btn-danger">Удалить</button>
+                        </div>
+                    </div>
+                    
+                </td>
+            </tr>
+            <tr>
+                <th scope="row">
+                    2
+                </th>
+                <td>
+                    Иванов Иван Иванович
+                </td>
+                <td>
+                    test@mail.ru
+                </td>
+                <td>
+                    <div style='display:flex; align-content:center; justify-content:space-between'>
+                        <span>Подтвержден</span>
+                        <div style='display:flex; align-content:center'>
+                            <button style='margin-right:5px' class='btn btn-light'><svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='currentColor' class='bi bi-info' viewBox='0 0 16 16'><path d='m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533L8.93 6.588zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0z'/></svg></button>
+                            <button class="btn btn-danger">Удалить</button>
+                        </div>
+                    </div>
+                    
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<div class="modal fade" id="removeTeacherModal" tabindex="-1" aria-labelledby="removeTeacherModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="removeTeacherModalLabel">Удаление студента</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <input type='hidden' id='removeTeacherModalId'/>
+        Вы действительно хотите удалить преподавателя <span id='removeTeacherModalName'></span>?
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
+        <button type="button" class="btn btn-danger" onclick='removeTeacher()' data-bs-dismiss="modal">Удалить</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="acceptTeacherModal" tabindex="-1" aria-labelledby="acceptTeacherModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="acceptTeacherModalLabel">Подтверждение преподавателя</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <input type='hidden' id='acceptTeacherModalId'/>
+        Вы действительно хотите подтвердить регистрацию преподавателя <span id='acceptTeacherModalName'></span>?
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
+        <button type="button" class="btn btn-primary" onclick='acceptTeacher()' data-bs-dismiss="modal">Подтвердить</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="position-fixed bottom-0 end-0 p-3" id="messages" style="z-index: 11">
+</div>
+
+<script>
+    updateTeachers();
+
+    function updateTeachers() {
+        $.ajax({
+            type: 'GET',
+            url: 'Admin/GetTeachers',
+            success: function(res) {
+                let h = "";
+
+                
+                for(let i = 0; i < res.length; i++) {
+                    h += "<tr>";
+                    h += "<th scope='row'>" + (i + 1) + "</th>";
+                    let name = res[i].surName + " " + res[i].firstName + " " + res[i].middleName;
+                    h += "<td>" + name + "</td>";
+                    h += "<td>" + res[i].email + "</td>";
+
+                    h += "<td><div style='display:flex; align-items:center; justify-content:space-between'>";
+                    if(res[i].isConfirmed) {
+                        h += "Подтвержден";
+                    }
+                    else {
+                        h += "<div style='display:flex; align-items:center'>";
+                        h += "<span style='margin-right:5px'>Не подтвержден</span>";
+                        h += "<button onclick='setAcceptTeacherModal(`" + res[i].id + "`, `" + name + "`)' data-bs-toggle='modal' data-bs-target='#acceptTeacherModal' class='btn btn-primary'>Подтвердить</button>";
+                        h += "</div>";
+
+                    }
+                    h += "<div style='display:flex; align-items:center'>";
+                    h += "<button style='margin-right:5px' class='btn btn-light'><svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='currentColor' class='bi bi-info' viewBox='0 0 16 16'><path d='m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533L8.93 6.588zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0z'/></svg></button>";
+                    h += "<button class='btn btn-danger' onclick='setRemoveTeacherModal(`" + res[i].id + "`, `" + name + "`)' data-bs-toggle='modal' data-bs-target='#removeTeacherModal'>Удалить</button>";
+                    h += "</div>";
+                    h += "</div></td>";
+                    h += "</tr>";
+                    
+                }
+                
+
+                $("#TeachersTable").html(h);
+            }
+        })
+    }
+
+    function setRemoveTeacherModal(_id, _name) {
+        $("#removeTeacherModalId").val(_id);
+        $("#removeTeacherModalName").html(_name);
+    }
+
+    function removeTeacher() {
+        let _id = $("#removeTeacherModalId").val();
+        
+        $.ajax({
+            type: 'POST',
+            url: 'Admin/RemoveUser',
+            data: { id: _id },
+            success: function() {
+                updateTeachers();
+            }
+        })
+    }
+
+    function setAcceptTeacherModal(_id, _name) {
+        $("#acceptTeacherModalId").val(_id);
+        $("#acceptTeacherModalName").html(_name);
+    }
+
+    function acceptTeacher() {
+        let _id = $("#acceptTeacherModalId").val();
+        
+        $.ajax({
+            type: 'POST',
+            url: 'Admin/AcceptUser',
+            data: { id: _id },
+            success: function() {
+                updateTeachers();
+            }
+        })
+    }
+</script>

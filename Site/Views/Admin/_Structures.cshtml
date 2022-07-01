@@ -1,0 +1,610 @@
+﻿
+<div class="m-3">
+    <div class="p-2 sticky-top" style="background-color:white">
+        <div class="d-flex">
+            <input class="form-control me-2" type="search" placeholder="Поиск" aria-label="Search" id="searchFieldStructures">
+            <button class="btn btn-outline-success" onclick="">Искать</button>
+        </div>
+    </div>
+
+    <div class="m-2" >
+        <div class="mb-1 d-flex" style="align-items:center">
+            <input id='newStructName' type="text" class="form-control" placeholder="Название структурного подразделения" style="width:340px; margin-right:20px"/>
+            <button class="btn btn-primary" onclick="addStruct()">Добавить</button>
+        </div>
+        <div class="form-check">
+          <input id='isFac' class="form-check-input" type="checkbox" value="" id="flexCheckChecked">
+          <label class="form-check-label" for="flexCheckChecked">
+            Есть ли факультеты
+          </label>
+        </div>
+        
+    </div>
+
+    <div class="mb-3">
+        <div class="accordion" id="accordionStructures">
+
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="directionInfoModal" tabindex="-1" aria-labelledby="directionInfoModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="directionInfoModalLabel">Название направления</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="row mb-3">
+            <div class="col">
+                <div style="display:flex; align-items:center">
+                    <input type="hidden" id='selectDirectionId'/>
+                    <input type="text" class="form-control" style="margin-right:5px" id='inpAddGroupName' placeholder="Название группы"/>
+                    <button class="btn btn-primary" onclick="addGroup()">Добавить</button>
+                </div>
+            </div>
+        </div>
+        <div class="row mb-3">
+            <div class='col'>
+                <div class="accordion" id="accordionGroups">
+                </div>
+            </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="removeStructModal" tabindex="-1" aria-labelledby="removeStructModallLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="removeStructModalLabel">Удаление структурного подразделения</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <input type="hidden" id='removeStructIdModal'/>
+        Вы действительно хотите удалить <span id="removeStructNameModal"></span>?
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>
+        <button type="button" class="btn btn-danger" onclick='removeStruct()' data-bs-dismiss="modal">Удалить</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="removeDirectionModal" tabindex="-1" aria-labelledby="removeDirectionModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="removeDirectionModalLabel">Удаление направления</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <input type="hidden" id='removeDirectionIdModal'/>
+        <input type="hidden" id='removeDirectionParentModal'/>
+        Вы действительно хотите удалить <span id="removeDirectionNameModal"></span>?
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>
+        <button type="button" class="btn btn-danger" onclick="removeDirection()" data-bs-dismiss="modal">Удалить</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="removeDirectionModalFac" tabindex="-1" aria-labelledby="removeDirectionModalFacLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="removeDirectionModalFacLabel">Удаление направления</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <input type="hidden" id='removeDirectionIdModalFac'/>
+        <input type="hidden" id='removeDirectionFacModalFac'/>
+        <input type="hidden" id='removeDirectionParentModalFac'/>
+        Вы действительно хотите удалить <span id="removeDirectionNameModalFac"></span>?
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>
+        <button type="button" class="btn btn-danger" onclick="removeDirectionFac()" data-bs-dismiss="modal">Удалить</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="removeFacModal" tabindex="-1" aria-labelledby="removeFacModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="removeFacModalLabel">Удаление факультета</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <input type="hidden" id='removeFacIdModal'/>
+        <input type="hidden" id='removeFacParentModal'/>
+        Вы действительно хотите удалить <span id="removeFacNameModal"></span>?
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>
+        <button type="button" class="btn btn-danger" onclick="removeFac()" data-bs-dismiss="modal">Удалить</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+    updateStructures();
+
+    function updateStructures() {
+        $.ajax({
+            type: 'GET',
+            url: 'Admin/GetStructures',
+            success: function(res) {
+                let h = "";
+
+                for(let i = 0; i < res.length; i++) {
+                    h += "<div class='accordion-item'>";
+
+                    h += "<h2 class='accordion-header' id='heading" + i + "' style='position:relative;'>";
+                    h += "<button onclick='updateStructItems(`" + res[i].id + "`)' class='accordion-button collapsed' type='button' data-bs-toggle='collapse' data-bs-target='#collapse" + i + "' aria-expanded='false' aria-controls='collapse" + i + "'>";
+                    h += "<div style='display:flex; justify-content:space-between; width:100%; margin-right:20px'>";
+                    h += "<span>" + res[i].name + "</span>";
+                    h += "</div>";
+                    h += "</button>";
+
+                    h += "<button onclick='setRemoveStructModal(`" + res[i].id + "`, `" + res[i].name + "`)' data-bs-toggle='modal' data-bs-target='#removeStructModal' class='btn btn-danger' style='position:absolute; right: -95px; top: 0; bottom: 0; margin: 5px 0;'>Удалить</button>";
+                    h += "</h2>";
+
+                    h += "<div id='collapse" + i + "' class='accordion-collapse collapse' aria-labelledby='heading" + i + "' data-bs-parent='#accordionStructures'>";
+                    h += "<div class='accordion-body' id='accordion-body-" + res[i].id + "'>";
+
+                    h += "</div>";
+                    h += "</div>";
+                    h += "</div>";
+                }
+                $("#accordionStructures").html(h);
+            }
+        })
+    }
+
+    function setRemoveStructModal(_id, _name) {
+        $("#removeStructIdModal").val(_id);
+        $("#removeStructNameModal").html(_name);
+    }
+
+    function removeStruct() {
+        let _id = $("#removeStructIdModal").val();
+
+        $.ajax({
+            type: 'POST',
+            url: 'Admin/RemoveStructureItem',
+            data: { id: _id },
+            success: function() {
+                updateStructures();
+            }
+        })
+    }
+
+    function addStruct() {
+        let _name = $("#newStructName").val();
+        let _isFac = $("#isFac").prop('checked');
+
+        $.ajax({
+            type: 'POST',
+            url: 'Admin/CreateStructure',
+            data: { name: _name, isFac: _isFac },
+            success: function() {
+                updateStructures();
+                $("#newStructName").val("");
+                $("#isFac").prop('checked', false);
+            }
+        })
+    }
+
+    var previewFacId = null;
+    var isSelect = false;
+    function updateStructItems(_id) {
+        isSelect = false;
+        $.ajax({
+            type: 'GET',
+            url: 'Admin/GetStructInfo',
+            data: { id: _id },
+            success: function(res) {
+                let h = "";
+
+                h += "<div class='row' id='structItem-" + _id + "'>";
+                if(res.isThereAreFaculties) {
+                    h += "<div class='col'>";
+                    h += "<h4>Факультеты</h4>";
+                    h += "<div class='mb-1' style='display:flex; align-items:center;'><input id='newFacName-" + res.id + "' type='text' class='form-control' style='margin-right:5px; width: 300px;' placeholder='Название факультета'/><button onclick='createFac(`" + res.id + "`)' class='btn btn-primary'>Создать</button></div>"
+                    h += "<div class='my-scroll'>";
+                    h += "<ul class='list-group'>";
+
+                    for(let i = 0; i < res.faculties.length; i++) {
+                        h += "<li class='list-group-item select-list-item' style='display:flex'>";
+                        h += "<button id='selectedFacBtn-" + res.faculties[i].id + "' class='select-list-item__button' onclick='selectFac(`" + res.faculties[i].id + "`, `" + _id + "`, true)'>";
+                        h += "<div style='display:flex; align-items:center; justify-content:space-between'>";
+                        h += "<span>" + res.faculties[i].name + "</span>";
+                        h += "</div>";
+                        h += "</button>";
+                        h += "<button class='btn btn-light' onclick='setRemoveFacModal(`" + res.faculties[i].id + "`, `" + res.faculties[i].name + "`, `" + _id + "`)'  data-bs-toggle='modal' data-bs-target='#removeFacModal'>Удалить</button>";
+                        h += "</li>";
+                    }
+
+                    h += "</ul>";
+                    h += "</div>";
+                    h += "</div>";
+                }
+                else {
+                    h += "<div class='col'>";
+                    h += "<h4>Направления подготовки</h4>";
+                    h += "<div class='mb-1' style='display:flex; align-items:center;'><input id='newDirectionName-" + res.id + "' type='text' class='form-control' style='margin-right:5px; width: 300px;' placeholder='Название направления'/><input id='newDirectionCode-" + res.id + "' type='text' class='form-control' style='margin-right:5px; width: 300px;' placeholder='Код направления'/><button onclick='createDirection(`" + res.id + "`)' class='btn btn-primary'>Создать</button></div>"
+                    h += "<div class='my-scroll'>";
+                    h += "<ul class='list-group'>";
+
+                    for(let i = 0; i < res.directionOfTrainings.length; i++) {
+                        h += "<li class='list-group-item select-list-item' style='display:flex'>";
+                        h += "<button class='select-list-item__button' onclick='selectDirection(`" + res.directionOfTrainings[i].id + "`)' data-bs-toggle='modal' data-bs-target='#directionInfoModal'>";
+                        h += "<div style='display:flex; align-items:center; justify-content:space-between'>";
+                        h += "<div style='display:flex; flex-direction:column; align-items:start'>";
+                        h += "<span>" + res.directionOfTrainings[i].name + "</span>";
+                        h += "<span class='text-muted'>" + res.directionOfTrainings[i].code + "</span>";
+                        h += "</div>";
+                        
+                        h += "<span class='text-muted'>13 групп</span>";
+                        h += "</div>";
+                        h += "</button>";
+                        h += "<button class='btn btn-light' onclick='setRemoveDirectionModal(`" + res.directionOfTrainings[i].id + "`, `" + res.directionOfTrainings[i].name + "`, `" + _id + "`)'  data-bs-toggle='modal' data-bs-target='#removeDirectionModal'>Удалить</button>";
+                        h += "</li>";
+                    }
+
+                    h += "</ul>";
+                    h += "</div>";
+                    h += "</div>";
+                }
+                h += "</div>";
+
+                $("#accordion-body-" + _id).html(h);
+            }
+        });
+    }
+
+    function createFac(_id) {
+        _name = $("#newFacName-" + _id).val();
+
+        $.ajax({
+            type: 'POST',
+            url: 'Admin/CreateFac',
+            data: { id: _id, name: _name },
+            success: function() {
+                updateStructItems(_id);
+                $("#newFacName-" + _id).val("");
+            }
+        })
+    }
+
+    function setRemoveFacModal(_id, _name, parent) {
+        $("#removeFacIdModal").val(_id);
+        $("#removeFacNameModal").html(_name);
+        $("#removeFacParentModal").val(parent);
+    }
+
+    function removeFac() {
+        let _id = $("#removeFacIdModal").val();
+        let parent = $("#removeFacParentModal").val();
+
+        $.ajax({
+            type: 'POST',
+            url: 'Admin/RemoveFac',
+            data: { id: _id },
+            success: function() {
+                updateStructItems(parent);
+                
+            }
+        })
+    }
+
+    function selectFac(_id, parent, cond) {
+        if(cond && previewFacId != "#selectedFacBtn-" + _id) {
+            $("#selectedFacBtn-" + _id).css({"background-color" : "#1B6EC2"});
+            $("#selectedFacBtn-" + _id).css({"color" : "white"});
+
+            $(previewFacId).css({"background-color" : "white"});
+            $(previewFacId).css({"color" : "black"});
+
+            previewFacId = "#selectedFacBtn-" + _id;
+        }
+        
+
+        let h = "";
+        if(!isSelect) {
+            h += "<div class='col-6' id='appCol-" + parent + "'></div>";
+            $("#structItem-" + parent).append(h);
+            isSelect = true;
+        }
+
+        $.ajax({
+            type: 'GET',
+            url: 'Admin/GetDirOfFac',
+            data: { id: _id },
+            success: function(res) {
+                h += "<h4>Направления подготовки</h4>";
+                h += "<div class='mb-1' style='display:flex; align-items:center;'><input id='newDirectionName-" + _id + "' type='text' class='form-control' style='margin-right:5px; width: 300px;' placeholder='Название направления'/><input id='newDirectionCode-" + _id + "' type='text' class='form-control' style='margin-right:5px; width: 300px;' placeholder='Код направления'/><button onclick='createDirectionForFac(`" + _id + "`, `" + parent + "`)' class='btn btn-primary'>Создать</button></div>"
+                h += "<div class='my-scroll'>";
+                h += "<ul class='list-group'>";
+
+                for(let i = 0; i < res.length; i++) {
+                    h += "<li class='list-group-item select-list-item' style='display:flex'>";
+                    h += "<button class='select-list-item__button' onclick='selectDirection(`" + res[i].id + "`)' data-bs-toggle='modal' data-bs-target='#directionInfoModal'>";
+                    h += "<div style='display:flex; align-items:center; justify-content:space-between'>";
+                    h += "<div style='display:flex; flex-direction:column; align-items:start'>";
+                    h += "<span>" + res[i].name + "</span>";
+                    h += "<span class='text-muted'>" + res[i].code + "</span>";
+                    h += "</div>";
+                    h += "</div>";
+                    h += "</button>";
+                    h += "<button class='btn btn-light' onclick='setRemoveDirectionModalFac(`" + res[i].id + "`, `" + res[i].name + "`, `" + _id + "`, `" + parent + "`)'  data-bs-toggle='modal' data-bs-target='#removeDirectionModalFac'>Удалить</button>";
+                    h += "</li>";
+                }
+
+                h += "</ul>";
+                h += "</div>";
+                $("#appCol-" + parent).html(h);
+            }
+        })
+    }
+
+    function createDirectionForFac(_id, p) {
+        _name = $("#newDirectionName-" + _id).val();
+        _code = $("#newDirectionCode-" + _id).val();
+
+        $.ajax({
+            type: 'POST',
+            url: 'Admin/CreateDirectionForFac',
+            data: { id: _id, name: _name, code: _code },
+            success: function() {
+                selectFac(_id, p, false);
+                $("#newDirectionName-" + _id).val("");
+                $("#newDirectionCode-" + _id).val("");
+            }
+        })
+    }
+
+    function setRemoveDirectionModalFac(_id, _name, _idF, parent) {
+        $("#removeDirectionIdModalFac").val(_id);
+        $("#removeDirectionNameModalFac").html(_name);
+
+        $("#removeDirectionFacModalFac").val(_idF);
+        $("#removeDirectionParentModalFac").val(parent);
+    }
+
+    function removeDirectionFac() {
+        let _id = $("#removeDirectionIdModalFac").val();
+        let parent = $("#removeDirectionParentModalFac").val();
+
+        $.ajax({
+            type: 'POST',
+            url: 'Admin/RemoveDirection',
+            data: { id: _id },
+            success: function() {
+                let _fac = $("#removeDirectionFacModalFac").val();
+                selectFac(_fac, parent, false);
+                
+            }
+        })
+    }
+
+    function setRemoveDirectionModal(_id, _name, parent) {
+        $("#removeDirectionIdModal").val(_id);
+        $("#removeDirectionNameModal").html(_name);
+        $("#removeDirectionParentModal").val(parent);
+    }
+
+    function removeDirection() {
+        let _id = $("#removeDirectionIdModal").val();
+        let parent = $("#removeDirectionParentModal").val();
+
+        $.ajax({
+            type: 'POST',
+            url: 'Admin/RemoveDirection',
+            data: { id: _id },
+            success: function() {
+                updateStructItems(parent);
+                
+            }
+        })
+    }
+
+    function createDirection(_id) {
+        _name = $("#newDirectionName-" + _id).val();
+        _code = $("#newDirectionCode-" + _id).val();
+
+        $.ajax({
+            type: 'POST',
+            url: 'Admin/CreateDirection',
+            data: { id: _id, name: _name, code: _code },
+            success: function() {
+                updateStructItems(_id);
+                $("#newDirectionName-" + _id).val("");
+                $("#newDirectionCode-" + _id).val("");
+            }
+        })
+    }
+
+    function selectDirection(_id) {
+        $("#selectDirectionId").val(_id);
+        $.ajax({
+            type: 'GET',
+            url: 'Admin/GetDirectionInfo',
+            data: { id: _id },
+            success: function(res) {
+                $("#directionInfoModalLabel").html(res.name);
+
+                let h = "";
+                
+                for(let i = 0; i < res.groups.length; i++) {
+                    h += "<div class='accordion-item'>";
+                    h += "<h2 class='accordion-header' id='headingGroup-" + i + "'>";
+                    h += "<button class='accordion-button collapsed' type='button' data-bs-toggle='collapse' data-bs-target='#collapseGroup-" + i + "' aria-expanded='false' aria-controls='collapseGroup-" + i + "'>" + res.groups[i].name + "</button>"
+                    h += "</h2>";
+                    h += "<div id='collapseGroup-" + i + "' class='accordion-collapse collapse' aria-labelledby='headingGroup-" + i + "' data-bs-parent='#accordionGroups'>";
+                    h += "<div class='accordion-body'>";
+                    h += "<button class='mb-3 btn btn-danger' id='removeGroupBtn-" + res.groups[i].id + "' onclick='removeGroup(`" + res.groups[i].id + "`)' style='display:block; width:100%'>Удалить</button>";
+                    h += "<div id='removeGroupAcceptDiv-" + res.groups[i].id + "' style='display:flex; align-items:center; display:none;'>Вы уверены? <button onclick='cancelRemoveGroup(`" + res.groups[i].id + "`)' style='margin: 0 10px' class='btn btn-secondary'>Отмена</button><button onclick='acceptRemoveGroup(`" + res.groups[i].id + "`, `" + _id + "`)' class='btn btn-danger'>Удалить</button></div>";
+
+                    h += "<strong>Новый курс</strong>";
+                    h += "<div class='input-group mb-1'>";
+                    h += "<input id='nameNewCourse-" + res.groups[i].id + "' type='text' class='form-control' placeholder='Название' aria-label='Username' aria-describedby='basic-addon'>";
+                    h += "<input id='hoursNewCourse-" + res.groups[i].id + "' type='number' class='form-control' placeholder='Часов' aria-label='Username' aria-describedby='basic-addon'>";
+                    h += "</div>";
+                    h += "<div class='mb-3' style='display:flex; align-items:center'>";
+                    h += "<select id='selectTeacher-" + res.groups[i].id + "' style='margin-right:5px' class='form-select' aria-label='Default select example'>";
+                    h += "<option value='1'>One</option>";
+                    h += "</select>";
+                    h += "<button class='btn btn-primary' onclick='createNewCourseForGroup(`" + res.groups[i].id + "`)'>Создать</button>"
+                    h += "</div>";
+
+                    h += "<strong>Курсы</strong>";
+                    h += "<ul class='list-group mb-3' id='coursesList-" + res.groups[i].id + "'>";
+                    
+                    h += "</ul>";
+
+                    h += "<strong>Студенты</strong>";
+                    h += "<ul class='list-group'>";
+                    for(let j = 0; j < res.groups[i].students.length; j++) {
+                        if(res.groups[i].students[j].isConfirmed) {
+                            h += "<li class='list-group-item'>";
+                            h += res.groups[i].students[j].surName + " " + res.groups[i].students[j].firstName + " " + res.groups[i].students[j].middleName;
+                            h += "</li>";
+                        }
+                        
+                    }
+                    h += "</ul>";
+                    h += "</div>";
+                    h += "</div>";
+                    h += "</div>";
+                    updateTeachersForNewCourse(res.groups[i].id);
+                    updateCourses(res.groups[i].id);
+                }
+
+                
+
+                $("#accordionGroups").html(h);
+            }
+        })
+    }
+
+    function updateTeachersForNewCourse(_id) {
+        $.ajax({
+            type: 'GET',
+            url: 'Admin/GetTeachers',
+            success: function(res) {
+                let h = "";
+
+                for(let i = 0; i < res.length; i++) {
+                    let name = res[i].surName + " " + res[i].firstName + " " + res[i].middleName;
+                    h += "<option value='" + res[i].id + "'>" + name + "</option>";
+                }
+                $("#selectTeacher-" + _id).html(h);
+            }
+        })
+    }
+
+    function createNewCourseForGroup(_gId) {
+        _name = $("#nameNewCourse-" + _gId).val();
+        _hours = $("#hoursNewCourse-" + _gId).val();
+        _tId = $("#selectTeacher-" + _gId).val();
+
+        $.ajax({
+            type: 'POST',
+            url: 'Admin/AddNewCourse',
+            data: { gId: _gId, tId: _tId, name: _name, hours: _hours },
+            success: function() {
+                updateCourses(_gId);
+            }
+        })
+    }
+
+    function updateCourses(_gId) {
+        $.ajax({
+            type: 'GET',
+            url: 'Admin/GetCoursesForGroup',
+            data: { gId: _gId },
+            success: function(res) {
+                let h = "";
+                for(let j = 0; j < res.length; j++) {
+                        h += "<li class='list-group-item'>";
+                        h += "<div style='display:flex; align-items:center; justify-content:space-between'>";
+                        h += "<div style='display:flex; flex-direction:column; align-items:start'>";
+                        h += "<span>" + res[j].name + "</span>";
+                        h += "<span class='text-muted'>" + res[j].hours + " часов (часа)</span>";
+                        h += "</div>";
+                        h += "<div style='display:flex; align-items:center'>";
+                        h += "<span style='margin-right:5px;'>" + res[j].teacher.surName + " " + res[j].teacher.firstName[0] + "." + res[j].teacher.middleName[0] + ".</span>";
+                        h += "<button class='btn btn-danger btn-sm' onclick='removeCourse(`" + res[j].id + "`, `" + _gId + "`)'>Удалить</button>";
+                        h += "</div>";
+                        h += "</div>";
+                        
+                        h += "</li>";
+                        
+                }
+                $("#coursesList-" + _gId).html(h);
+            }
+        })
+    }
+
+    function removeCourse(_id, parent) {
+        $.ajax({
+            type: 'POST',
+            url: 'Admin/RemoveCourse',
+            data: { id: _id },
+            success: function() {
+                updateCourses(parent);
+            }
+        })
+    }
+
+    function removeGroup(_id) {
+        $("#removeGroupBtn-" + _id).css({"display" : "none"});
+        $("#removeGroupAcceptDiv-" + _id).css({"display" : "block"});
+    }
+    
+    function cancelRemoveGroup(_id) {
+        $("#removeGroupBtn-" + _id).css({"display" : "block"});
+        $("#removeGroupAcceptDiv-" + _id).css({"display" : "none"});
+    }
+    
+    function acceptRemoveGroup(_id, parent) {
+        $.ajax({
+            type: 'POST',
+            url: 'Admin/RemoveGroup',
+            data: { id: _id },
+            success: function() {
+                selectDirection(parent);
+            }
+        })
+    }
+
+    function addGroup() {
+        let _id = $("#selectDirectionId").val();
+        let _name = $("#inpAddGroupName").val();
+
+        $.ajax({
+            type: 'POST',
+            url: 'Admin/AddGroup',
+            data: { id: _id, name: _name },
+            success: function() {
+                selectDirection(_id);
+                $("#inpAddGroupName").val("");
+            }
+        })
+    }
+
+</script>

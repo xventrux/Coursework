@@ -1,0 +1,25 @@
+﻿@using Site.Models.Entities
+@{
+    ViewData["Title"] = "Редактирование лекции";
+}
+@model EducationalMaterial
+
+<script src="~/js/ckeditor/ckeditor.js"></script>
+
+<h2>@Model.Name</h2>
+
+<form method='post' asp-controller="Material" asp-action="EditMaterial">
+    <input name="id" type='hidden' value="@Model.Id"/>
+    <div class="mb-3">
+        <textarea name="HTML"></textarea>
+    </div>
+    <button class="btn btn-primary" type='submit'>Сохранить</button>
+</form>
+
+
+<script>
+    window.onload = function() {
+        var newCKEdit = CKEDITOR.replace('@Html.IdFor(x=>x.HTML)');
+        newCKEdit.updateElement();
+    }
+</script>
